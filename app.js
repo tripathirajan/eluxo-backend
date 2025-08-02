@@ -1,7 +1,19 @@
 const http = require("http");
 const { setupServer, applyErrorHandlers } = require("./server");
+
 const app = setupServer();
 
+/**
+ * Middlewares
+ */
+
+/**
+ * routes
+ */
+
+/**
+ * Server setup
+ */
 const server = http.createServer(app);
 
 server.listen(process.env.PORT || 3000, () => {
