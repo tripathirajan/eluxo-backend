@@ -9,7 +9,9 @@ function useCors(app) {
         !origin || allowedOrigins.includes(origin)
           ? cb(null, true)
           : cb(new Error("Not allowed by CORS")),
-      credentials: true,
+      credentials: process.env.CORS_ALLOW_CREDENTIALS || true,
+      allowedHeaders: process.env.CORS_ALLOW_HEADERS?.split(",") || [],
+      methods: process.env.CORS_ALLOW_METHODS?.split(",") || [],
     }),
   );
 }

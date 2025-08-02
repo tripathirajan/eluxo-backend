@@ -35,9 +35,19 @@ Eluxo is a modern full-stack e-commerce platform. This repository contains the b
 3. **Create a `.env` file in the root and configure it**
 
    ```
-   PORT=5000
-   MONGODB_URI=your_mongodb_uri
+   PORT=3300
+   ALLOWED_ORIGINS=http://localhost:9000,http://127.0.0.1:9000
+   MONGODB_URI=mongodb://localhost:27017/eluxo
    JWT_SECRET=your_jwt_secret
+   JWT_EXPIRATION=1h
+   COOKIE_SECRET=your_cookie_secret
+   SESSION_NAME=sessionId
+   SESSION_EXPIRATION=1d
+   CORS_ENABLED=true
+   CORS_ALLOW_CREDENTIALS=true
+   CORS_ALLOW_HEADERS=Content-Type,Authorization
+   CORS_ALLOW_METHODS=GET,POST,PUT,OPTIONS
+
    CLOUDINARY_CLOUD_NAME=your_cloud_name
    CLOUDINARY_API_KEY=your_api_key
    CLOUDINARY_API_SECRET=your_api_secret
@@ -96,6 +106,14 @@ eluxo-backend/
 | POST   | /api/orders        | Create an order             |
 
 ---
+
+## Commits
+
+before pushing any changes please run following command:
+
+```bash
+npm run lint:fix && npm run format:fix
+```
 
 ## 🪪 License
 
