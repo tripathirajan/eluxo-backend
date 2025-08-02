@@ -2,16 +2,22 @@
   "name": "eluxo-backend",
   "version": "1.0.0",
   "description": "Eluxo is a modern full-stack e-commerce platform. This repository contains the backend service responsible for authentication, product management, order processing, and integrations with Cloudinary and email providers.",
-  "main": "server.mjs",
+  "main": "app.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "husky": "^9.1.7",
+    "nodemon": "^3.1.10",
     "prettier": "^3.6.2"
   },
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -39,5 +45,11 @@
   "bugs": {
     "url": "https://github.com/tripathirajan/eluxo-backend/issues"
   },
-  "homepage": "https://github.com/tripathirajan/eluxo-backend#readme"
+  "homepage": "https://github.com/tripathirajan/eluxo-backend#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  }
 }

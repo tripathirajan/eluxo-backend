@@ -1,6 +1,3 @@
-import eslintJs from "@eslint/js";
-import prettierPlugin from "eslint-plugin-prettier";
-
 export default [
   {
     files: ["**/*.js"],
@@ -12,14 +9,15 @@ export default [
         process: "readonly",
       },
     },
-    plugins: {
-      prettier: prettierPlugin,
-    },
     rules: {
-      ...eslintJs.configs.recommended.rules,
-      "prettier/prettier": "warn",
       "no-unused-vars": "warn",
       "no-console": "off",
+    },
+  },
+  {
+    files: ["server/plugins/*.js"], // ⬅️ your CJS files
+    languageOptions: {
+      sourceType: "script", // this treats it as CommonJS
     },
   },
 ];
