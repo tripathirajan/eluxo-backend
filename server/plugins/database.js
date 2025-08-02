@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const logger = require('../../services/logger');
 
 let isConnected = false;
 
@@ -15,16 +16,16 @@ async function connectToMongo() {
     });
 
     isConnected = true;
-    console.log('✅ Connected to MongoDB via Mongoose');
+    logger.log('✅ Connected to MongoDB via Mongoose');
 
     process.on('SIGINT', async () => {
       await mongoose.connection.close();
-      console.log('🔌 MongoDB connection closed due to SIGINT');
+      logger.log('🔌 MongoDB connection closed due to SIGINT');
       /* eslint-disable no-process-exit */
       process.exit(0);
     });
   } catch (err) {
-    console.error('❌ MongoDB connection error:', err);
+    logger.error('❌ MongoDB connection error:', err);
     /* eslint-disable no-process-exit */
     process.exit(1);
   }
