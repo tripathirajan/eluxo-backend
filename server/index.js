@@ -1,12 +1,12 @@
-const express = require("express");
-const loadEnv = require("./plugins/env");
-const useCors = require("./plugins/cors");
-const useCookies = require("./plugins/cookies");
-const useErrorHandler = require("./plugins/error-handler");
-const handleCrashes = require("./plugins/crash-handler");
-const { connectToMongo } = require("./plugins/database");
+const express = require('express');
+const loadEnv = require('./plugins/env');
+const useCors = require('./plugins/cors');
+const useCookies = require('./plugins/cookies');
+const useErrorHandler = require('./plugins/error-handler');
+const handleCrashes = require('./plugins/crash-handler');
+const { connectToMongo } = require('./plugins/database');
 
-module.exports.setupServer = function () {
+module.exports.setupServer = () => {
   loadEnv();
   handleCrashes();
   connectToMongo();
@@ -21,6 +21,6 @@ module.exports.setupServer = function () {
   return app;
 };
 
-module.exports.applyErrorHandlers = function (app) {
+module.exports.applyErrorHandlers = (app) => {
   useErrorHandler(app);
 };

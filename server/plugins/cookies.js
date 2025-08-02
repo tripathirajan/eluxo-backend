@@ -1,6 +1,6 @@
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 
-const useCookies = function (app) {
+const useCookies = (app) => {
   app.use(cookieParser());
 };
 

@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 let isConnected = false;
 
 async function connectToMongo() {
   const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI in environment");
+  if (!uri) throw new Error('Missing MONGODB_URI in environment');
 
   if (isConnected) return;
 
@@ -15,22 +15,24 @@ async function connectToMongo() {
     });
 
     isConnected = true;
-    console.log("✅ Connected to MongoDB via Mongoose");
+    console.log('✅ Connected to MongoDB via Mongoose');
 
-    process.on("SIGINT", async () => {
+    process.on('SIGINT', async () => {
       await mongoose.connection.close();
-      console.log("🔌 MongoDB connection closed due to SIGINT");
+      console.log('🔌 MongoDB connection closed due to SIGINT');
+      /* eslint-disable no-process-exit */
       process.exit(0);
     });
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
+    console.error('❌ MongoDB connection error:', err);
+    /* eslint-disable no-process-exit */
     process.exit(1);
   }
 }
 
 function getMongoose() {
   if (!isConnected) {
-    throw new Error("Mongoose not connected. Call connectToMongo() first.");
+    throw new Error('Mongoose not connected. Call connectToMongo() first.');
   }
   return mongoose;
 }

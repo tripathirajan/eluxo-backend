@@ -1,4 +1,5 @@
-const dotenv = require("dotenv");
-module.exports = function () {
+const dotenv = require('dotenv');
+
+module.exports = () => {
   dotenv.config();
 };
