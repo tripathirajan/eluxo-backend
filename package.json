@@ -7,6 +7,8 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.32.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",

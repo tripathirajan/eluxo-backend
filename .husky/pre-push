@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+branch_name=$(git symbolic-ref --short HEAD)
+
+if [ "$branch_name" = "main" ] || [ "$branch_name" = "develop" ]; then
+  exit 0
+fi
+
+if ! echo "$branch_name" | grep -Eq '^(feat|fix|docs|style|refactor|test|chore)/[a-z0-9._-]+/[a-z0-9._-]+$'; then
+  echo "❌ Invalid branch name: $branch_name"
+  echo "✅ Expected format: <type>/<username>/<feature-name>"
+  exit 1
+fi
