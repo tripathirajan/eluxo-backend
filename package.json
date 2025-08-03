@@ -26,7 +26,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "npm run lint:fix && npm run format:fix",
+    "build:test": "npm run lint && npm run format",
+    "precommit": "npm run build:test"
   },
   "repository": {
     "type": "git",

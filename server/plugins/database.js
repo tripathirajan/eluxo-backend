@@ -16,16 +16,19 @@ async function connectToMongo() {
     });
 
     isConnected = true;
-    logger.log('✅ Connected to MongoDB via Mongoose');
+    logger.info('✅ Connected to MongoDB via Mongoose');
 
     process.on('SIGINT', async () => {
       await mongoose.connection.close();
-      logger.log('🔌 MongoDB connection closed due to SIGINT');
+      logger.info('🔌 MongoDB connection closed due to SIGINT');
       /* eslint-disable no-process-exit */
       process.exit(0);
     });
   } catch (err) {
-    logger.error('❌ MongoDB connection error:', err);
+    logger.error('❌ MongoDB connection error:', {
+      error: err.message,
+      stack: err.stack,
+    });
     /* eslint-disable no-process-exit */
     process.exit(1);
   }
