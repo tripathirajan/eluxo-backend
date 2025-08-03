@@ -8,7 +8,7 @@ const app = setupServer();
 /**
  * Middlewares
  */
-app.use(configMiddleware)
+app.use(configMiddleware);
 
 /**
  * routes
