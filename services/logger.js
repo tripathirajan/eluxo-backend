@@ -9,9 +9,9 @@ const log = (payload) => {
 };
 
 module.exports = {
-  info: (message) => log({ level: 'info', message }),
-  error: (message) => log({ level: 'error', message }),
-  warn: (message) => log({ level: 'warn', message }),
-  debug: (message) => log({ level: 'debug', message }),
-  trace: (message) => log({ level: 'trace', message }),
+  info: (message, metadata) => log({ level: 'info', message, ...metadata }),
+  error: (message, metadata) => log({ level: 'error', message, ...metadata }),
+  warn: (message, metadata) => log({ level: 'warn', message, ...metadata }),
+  debug: (message, metadata) => log({ level: 'debug', message, ...metadata }),
+  trace: (message, metadata) => log({ level: 'trace', message, ...metadata }),
 };
