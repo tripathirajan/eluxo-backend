@@ -11,10 +11,13 @@ const envConfigMapper = {
 };
 const env = process.env.NODE_ENV || 'local';
 const allowedEnvFiles = ['local', 'stagging', 'production'];
+
 const readEnvConfig = () => {
   if (!allowedEnvFiles.includes(env)) throw new Error('Env not allowed!');
   // return env config file from mapper
   return envConfigMapper[env || 'local'];
 };
 
-module.exports = readEnvConfig();
+const getConfig = () => readEnvConfig();
+
+module.exports = getConfig;

@@ -19,4 +19,9 @@ module.exports = {
     'security/detect-object-injection': 'warn',
     'linebreak-style': ['warn', 'unix'],
   },
+  settings: {
+    node: {
+      tryExtensions: ['.js', '.json', '.node'],
+    },
+  },
 };

@@ -3,7 +3,7 @@ module.exports = {
     name: 'eluxo',
     port: process.env.PORT,
     description: '',
-    env: 'staging',
+    env: 'local',
     secret: process.env.APP_SERECT,
   },
 
@@ -17,5 +17,13 @@ module.exports = {
     allowedOrigins: [],
     allowedHeaders: [],
     allowedMethods: [],
+  },
+  helmet: {
+    contentSecurityPolicy: false, // disabled for REST API
+    dnsPrefetchControl: { allow: false },
+    frameguard: { action: 'deny' },
+    referrerPolicy: { policy: 'no-referrer' },
+    crossOriginResourcePolicy: { policy: 'same-site' },
+    crossOriginEmbedderPolicy: { policy: 'require-corp' },
   },
 };

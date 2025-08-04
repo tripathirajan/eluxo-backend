@@ -18,4 +18,12 @@ module.exports = {
     allowedHeaders: [],
     allowedMethods: [],
   },
+  helmet: {
+    contentSecurityPolicy: false, // disabled for REST API
+    dnsPrefetchControl: { allow: false },
+    frameguard: { action: 'deny' },
+    referrerPolicy: { policy: 'no-referrer' },
+    crossOriginResourcePolicy: { policy: 'same-site' },
+    crossOriginEmbedderPolicy: { policy: 'require-corp' },
+  },
 };
