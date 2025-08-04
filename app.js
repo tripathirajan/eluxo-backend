@@ -1,4 +1,5 @@
 const http = require('http');
+
 const { setupServer, applyErrorHandlers } = require('./server');
 const logger = require('./services/logger');
 const configMiddleware = require('./middlewares/index');
