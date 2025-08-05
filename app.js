@@ -2,18 +2,14 @@ const http = require('http');
 
 const { setupServer, applyErrorHandlers } = require('./server');
 const logger = require('./services/logger');
-const configMiddleware = require('./middlewares/index');
+const notFound = require('./middlewares/notFound');
 
-const app = setupServer();
-
-/**
- * Middlewares
- */
-app.use(configMiddleware);
-
-/**
- * routes
- */
+const app = setupServer({
+  postRouteMiddleware: (appInstance) => {
+    // not found middleware
+    appInstance.use(notFound);
+  },
+});
 
 /**
  * Server setup
