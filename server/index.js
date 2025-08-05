@@ -8,6 +8,7 @@ const { connectToMongo } = require('./plugins/database');
 const useHelmet = require('./plugins/security');
 const useSanitizer = require('./plugins/sanitizer');
 const useConfigReader = require('./plugins/configReader');
+const useResponseFormatter = require('./plugins/responseFormatter');
 
 module.exports.setupServer = ({
   routes,
@@ -26,7 +27,7 @@ module.exports.setupServer = ({
 
   useCors(app);
   useCookies(app);
-
+  useResponseFormatter(app);
   if (typeof customMiddlewares === 'function') customMiddlewares(app);
 
   if (typeof routes === 'function') routes(app);
@@ -34,6 +35,7 @@ module.exports.setupServer = ({
   if (typeof postRouteMiddleware === 'function') postRouteMiddleware(app);
 
   handleCrashes();
+
   return app;
 };
 
