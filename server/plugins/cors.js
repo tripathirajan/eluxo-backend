@@ -1,7 +1,12 @@
 const cors = require('cors');
+const getConfig = require('../../config/env');
+
+const { cors: corsConfig } = getConfig();
 
 function useCors(app) {
-  const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',') || [];
+  const allowedOrigins = corsConfig.allowedOrigins || [];
+  const allowedHeaders = corsConfig.allowedHeaders || [];
+  const allowedMethods = corsConfig.allowedMethods || [];
 
   app.use(
     cors({
@@ -9,9 +14,9 @@ function useCors(app) {
         !origin || allowedOrigins.includes(origin)
           ? cb(null, true)
           : cb(new Error('Not allowed by CORS')),
-      credentials: process.env.CORS_ALLOW_CREDENTIALS || true,
-      allowedHeaders: process.env.CORS_ALLOW_HEADERS.split(',') || [],
-      methods: process.env.CORS_ALLOW_METHODS.split(',') || [],
+      credentials: corsConfig.allowedCredentials || true,
+      allowedHeaders,
+      methods: allowedMethods,
     })
   );
 }
