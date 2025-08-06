@@ -9,6 +9,7 @@ const useHelmet = require('./plugins/security');
 const useSanitizer = require('./plugins/sanitizer');
 const useConfigReader = require('./plugins/configReader');
 const useResponseFormatter = require('./plugins/responseFormatter');
+const useGlobalErrorHandler = require('./plugins/globalErrorHandler');
 
 module.exports.setupServer = ({
   routes,
@@ -28,6 +29,7 @@ module.exports.setupServer = ({
   useCors(app);
   useCookies(app);
   useResponseFormatter(app);
+  useGlobalErrorHandler(app);
   if (typeof customMiddlewares === 'function') customMiddlewares(app);
 
   if (typeof routes === 'function') routes(app);
