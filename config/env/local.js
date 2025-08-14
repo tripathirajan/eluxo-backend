@@ -8,11 +8,7 @@ module.exports = {
   },
 
   db: {
-    name: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    usr: process.env.DB_USR,
-    pwd: process.env.DB_PWD,
-    port: process.env.DB_PORT,
+    uri: process.env.DB_URI,
   },
   cors: {
     allowedOrigins: process.env.CORS_ALLOWED_ORIGINS

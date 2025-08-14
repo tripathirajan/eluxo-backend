@@ -1,21 +1,14 @@
-// import all config;
-const local = require('./local');
-const stagging = require('./staging');
-const production = require('./production');
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
+// import config based on env
 
-// create a mapper
-const envConfigMapper = {
-  local,
-  stagging,
-  production,
-};
 const env = process.env.NODE_ENV || 'local';
-const allowedEnvFiles = ['local', 'stagging', 'production'];
+const allowedEnvFiles = ['local', 'staging', 'production'];
 
 const readEnvConfig = () => {
   if (!allowedEnvFiles.includes(env)) throw new Error('Env not allowed!');
-  // return env config file from mapper
-  return envConfigMapper[env || 'local'];
+  // Dynamically require only the needed config file
+  return require(`./${env}`);
 };
 
 const getConfig = () => readEnvConfig();

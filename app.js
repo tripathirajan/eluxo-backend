@@ -1,7 +1,9 @@
 const http = require('http');
 
 const { setupServer, applyErrorHandlers } = require('./server');
-const logger = require('./services/logger');
+const {
+  prettyLogger: { banner, notice, showMsg, showErrorMsg },
+} = require('./services/logger');
 const notFound = require('./middlewares/notFound');
 
 const app = setupServer({
@@ -11,6 +13,15 @@ const app = setupServer({
   },
 });
 
+const showAppBanner = ({ host, port }) => {
+  banner('Eluxo');
+  showMsg('🚀 Server running');
+  showMsg(`🖥️  Host: ${host === '::' ? 'localhost' : host}`);
+  showMsg(`🔌 Port: ${port}`);
+  showMsg(`💻 Environment: ${process.env.NODE_ENV || 'development'}`);
+
+  notice(`Press Ctrl+C to stop the server`);
+};
 /**
  * Server setup
  */
@@ -19,18 +30,7 @@ server.listen(process.env.PORT || 3000, () => {
   const address = server.address();
   const host = typeof address === 'string' ? address : address.address;
   const port = typeof address === 'string' ? 0 : address.port;
-  logger.info(`Server is running at http://${host}:${port}`);
-  logger.info(`Press Ctrl+C to stop the server`);
-});
-// setup routes here
-// gracefully handle shutdown
-process.on('SIGINT', () => {
-  logger.info('Shutting down server...');
-  server.close(() => {
-    logger.info('Server has been shut down gracefully.');
-    /* eslint-disable no-process-exit */
-    process.exit(0);
-  });
+  showAppBanner({ host, port });
 });
 
-applyErrorHandlers(app);
+applyErrorHandlers(app, server);
