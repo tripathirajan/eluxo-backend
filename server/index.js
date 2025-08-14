@@ -13,6 +13,7 @@ const useSanitizer = require('./plugins/sanitizer');
 const useConfigReader = require('./plugins/configReader');
 const useResponseFormatter = require('./plugins/responseFormatter');
 const useGlobalErrorHandler = require('./plugins/globalErrorHandler');
+const useStaticAssets = require('./plugins/staticAssets');
 const useAppContext = require('./plugins/appContext');
 const {
   prettyLogger: { showMsg },
@@ -33,13 +34,12 @@ module.exports.setupServer = ({
 
   useCors(app);
   useCookies(app);
+  useStaticAssets(app);
   useResponseFormatter(app);
 
   useAppContext(app);
   if (typeof customMiddlewares === 'function') customMiddlewares(app);
-
   if (typeof routes === 'function') routes(app);
-
   if (typeof postRouteMiddleware === 'function') postRouteMiddleware(app);
 
   useGlobalErrorHandler(app);
