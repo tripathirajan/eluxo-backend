@@ -32,7 +32,9 @@
     "prepare": "husky",
     "build:fix": "npm run lint:fix && npm run format:fix",
     "build:test": "npm run lint && npm run format",
-    "precommit": "npm run build:test"
+    "precommit": "npm run build:test",
+    "show:envs": "grep -R \"process.env.\" ./server ./config",
+    "get:hash": "node ./scripts/generate-hash.js"
   },
   "repository": {
     "type": "git",
@@ -57,15 +59,20 @@
   "homepage": "https://github.com/tripathirajan/eluxo-backend#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "boxen": "^6.2.1",
+    "chalk": "^4.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
-    "dotenv": "^17.2.1",
+    "dotenv-flow": "^4.1.0",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
+    "figlet": "^1.8.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "zod": "^4.0.17"
   }
 }

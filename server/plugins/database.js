@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
-const logger = require('../../services/logger');
+const { prettyLogger: logger, error } = require('../../services/logger');
 const getConfig = require('../../config/env');
 
 let isConnected = false;
-
-const { database: dbConfig } = getConfig();
-
-const { name, host, usr, pwd, port, uri: dbURI } = dbConfig || {};
 
 /**
  * Get the MongoDB connection URI.
@@ -17,26 +13,17 @@ const { name, host, usr, pwd, port, uri: dbURI } = dbConfig || {};
  * @throws {Error} If the database configuration is incomplete
  */
 const getDbURI = () => {
+  const { uri: dbURI } = getConfig().db;
   // If dbURI is provided, use it directly
-  if (dbURI && typeof dbURI === 'string') {
-    if (
-      !dbURI.startsWith('mongodb://') &&
-      !dbURI.startsWith('mongodb+srv://')
-    ) {
-      logger.warn('dbURI should start with mongodb:// or mongodb+srv://');
-      throw new Error('Invalid dbURI format');
-    }
-    return dbURI;
+  if (!dbURI || typeof dbURI !== 'string') {
+    throw new Error('Missing or invalid DB_URI in environment');
   }
-
-  if (!name || !host || !port || !usr || !pwd) {
-    logger.error(
-      'Database configuration is incomplete. Please check your environment variables.',
-      { ...dbConfig }
+  if (!dbURI.startsWith('mongodb://') && !dbURI.startsWith('mongodb+srv://')) {
+    throw new Error(
+      'Invalid dbURI format, must start with "mongodb://" or "mongodb+srv://"'
     );
-    throw new Error('Incomplete database configuration');
   }
-  return `mongodb://${usr}:${pwd}@${host}:${port}/${name}`;
+  return dbURI;
 };
 
 /**
@@ -55,22 +42,13 @@ async function connectToMongo() {
   if (isConnected) return;
 
   try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri);
 
     isConnected = true;
-    logger.info('✅ Connected to MongoDB via Mongoose');
-
-    process.on('SIGINT', async () => {
-      await mongoose.connection.close();
-      logger.info('🔌 MongoDB connection closed due to SIGINT');
-      /* eslint-disable no-process-exit */
-      process.exit(0);
-    });
+    logger.showMsg('✅ Connected to MongoDB via Mongoose');
   } catch (err) {
-    logger.error('❌ MongoDB connection error', {
+    logger.showErrorMsg('❌ MongoDB connection error');
+    error('MongoDB connection failed', {
       error: err.message,
       stack: err.stack,
     });
@@ -89,4 +67,13 @@ function getMongoose() {
 module.exports = {
   connectToMongo,
   getMongoose,
+  closeConnection: async () => {
+    if (isConnected) {
+      await mongoose.connection.close();
+      isConnected = false;
+      logger.showMsg('🔌 MongoDB connection closed');
+    } else {
+      logger.showMsg('🔌 No active MongoDB connection to close');
+    }
+  },
 };
