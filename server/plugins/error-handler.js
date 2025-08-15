@@ -8,15 +8,16 @@ const useErrorHandler = (app) => {
       return next(err);
     }
     const isOperational = err instanceof AppError && err.isOperational;
-    logger.error('Global Error', {
+    logger.error(err.name || 'Application_error', {
       error: err.message,
-      stack: err.stack,
       url: req.originalUrl,
       method: req.method,
       body: req.body,
       query: req.query,
       params: req.params,
       code: err.code || errorRegistry.GENERAL.INTERNAL_ERROR,
+      ...(err.stack &&
+        process.env.NODE_ENV !== 'production' && { stack: err.stack }),
     });
 
     if (isOperational) {

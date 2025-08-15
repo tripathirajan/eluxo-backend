@@ -17,6 +17,7 @@ const useSanitizer = require('./plugins/sanitizer');
 const useAppContext = require('./plugins/appContext');
 const useStaticAssets = require('./plugins/staticAssets');
 const useRequestLogger = require('./plugins/request-logger');
+const useIgnoreRoutes = require('./plugins/ignoreRoutes');
 
 module.exports.setupServer = ({
   routes,
@@ -30,6 +31,7 @@ module.exports.setupServer = ({
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  useIgnoreRoutes(app);
   useStaticAssets(app);
   useCors(app);
   useCookies(app);

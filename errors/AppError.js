@@ -16,6 +16,7 @@ class AppError extends Error {
     isOperational = true
   ) {
     super(message);
+    this.name = this.constructor.name; // Set the error name to the class name
     this.statusCode = statusCode;
     this.code = code;
     this.isOperational = isOperational;

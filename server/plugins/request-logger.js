@@ -18,9 +18,6 @@ function requestLogger(req, res, next) {
   if (augmentedContext.correlationId) {
     res.setHeader('X-Correlation-Id', augmentedContext.correlationId);
   }
-
-  logger.info('REQUEST_START', augmentedContext);
-
   res.on('finish', () => {
     const durationMs = Date.now() - startTime;
     // Always read latest context
@@ -29,7 +26,7 @@ function requestLogger(req, res, next) {
       statusCode: res.statusCode,
       durationMs,
     };
-    logger.info('REQUEST_FINISH', finishedContext);
+    logger.info('incoming_request_finished', finishedContext);
   });
 
   res.on('close', () => {

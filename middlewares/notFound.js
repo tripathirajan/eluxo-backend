@@ -5,8 +5,8 @@ const notFound = (req, res, next) => {
   if (!res.headersSent) {
     next(
       new ResponseError(
-        errorRegistry.GENERAL.SERVICE_UNAVAILABLE,
-        'Service not available',
+        errorRegistry.GENERAL.NOT_FOUND,
+        'Resource not found',
         404
       )
     );
