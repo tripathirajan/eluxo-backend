@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const AppError = require('../../errors/AppError');
 
 const DEFAULT_SALT_ROUNDS = 10;
 
@@ -8,7 +9,7 @@ const DEFAULT_SALT_ROUNDS = 10;
  * @returns {Promise<string>} hashed password
  */
 async function hashPassword(password) {
-  if (!password) throw new Error('Password is required for hashing');
+  if (!password) throw new AppError('Password is required for hashing');
   return bcrypt.hash(password, DEFAULT_SALT_ROUNDS);
 }
 
@@ -30,7 +31,7 @@ async function comparePassword(plain, hashed) {
  * @returns {Promise<string>}
  */
 async function hashValue(value, saltRounds = DEFAULT_SALT_ROUNDS) {
-  if (!value) throw new Error('Value is required for hashing');
+  if (!value) throw new AppError('Value is required for hashing');
   return bcrypt.hash(value, saltRounds);
 }
 

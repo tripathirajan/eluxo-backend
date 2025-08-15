@@ -23,6 +23,8 @@
  */
 
 const { AsyncLocalStorage } = require('node:async_hooks');
+const AppError = require('../errors/AppError');
+const errorRegistry = require('../errors/errorRegistry');
 
 let store = new AsyncLocalStorage();
 
@@ -32,12 +34,14 @@ let store = new AsyncLocalStorage();
  * default store with a different implementation.
  *
  * @param {AsyncLocalStorage} newStore - The new store instance to set.
- * @throws {Error} If the provided store is not an instance of AsyncLocalStorage.
+ * @throws {AppError} If the provided store is not an instance of AsyncLocalStorage.
  */
 const setStore = (newStore) => {
   if (!(newStore instanceof AsyncLocalStorage)) {
-    throw new Error(
-      'The provided store must be an instance of AsyncLocalStorage'
+    throw new AppError(
+      'The provided store must be an instance of AsyncLocalStorage',
+      400,
+      errorRegistry.GENERAL.INVALID_STORE_INSTANCE
     );
   }
   store = newStore;
