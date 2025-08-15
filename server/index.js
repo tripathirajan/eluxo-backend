@@ -42,13 +42,13 @@ module.exports.setupServer = ({
 
   if (typeof postRouteMiddleware === 'function') postRouteMiddleware(app);
 
-  useErrorHandler(app);
-
   return app;
 };
 
 module.exports.applyErrorHandlers = (app, server) => {
+  useErrorHandler(app);
   handleCrashes();
+
   process.on('SIGINT', async () => {
     await closeConnection();
     server.close(() => {

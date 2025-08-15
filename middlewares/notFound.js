@@ -1,9 +1,15 @@
+const errorRegistry = require('../errors/errorRegistry');
+const ResponseError = require('../errors/ResponseError');
+
 const notFound = (req, res, next) => {
   if (!res.headersSent) {
-    res.status(404).json({
-      message: 'Service not available',
-      success: false,
-    });
+    next(
+      new ResponseError(
+        errorRegistry.GENERAL.SERVICE_UNAVAILABLE,
+        'Service not available',
+        404
+      )
+    );
   } else {
     next();
   }

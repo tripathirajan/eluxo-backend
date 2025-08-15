@@ -3,7 +3,10 @@ const logger = require('../../services/logger');
 const errorRegistry = require('../../errors/errorRegistry');
 
 const useErrorHandler = (app) => {
-  app.use((err, req, res) => {
+  app.use((err, req, res, next) => {
+    if (res.headersSent) {
+      return next(err);
+    }
     const isOperational = err instanceof AppError && err.isOperational;
     logger.error('Global Error', {
       error: err.message,

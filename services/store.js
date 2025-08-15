@@ -55,7 +55,7 @@ const setStore = (newStore) => {
  */
 const getStore = () => {
   if (!store) {
-    store = new AsyncLocalStorage();
+    setStore(new AsyncLocalStorage());
   }
   return store;
 };

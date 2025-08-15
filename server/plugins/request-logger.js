@@ -1,4 +1,5 @@
-const { getStoreData, setStore } = require('./appContext');
+const { getStoreData } = require('../../services/store');
+
 const logger = require('../../services/logger');
 
 function requestLogger(req, res, next) {
@@ -12,33 +13,32 @@ function requestLogger(req, res, next) {
     path: req.originalUrl || req.url,
     userId: (req.user && req.user.id) || undefined,
   };
-  setStore(augmentedContext);
 
   // Ensure X-Correlation-Id is returned to client (at earliest)
   if (augmentedContext.correlationId) {
     res.setHeader('X-Correlation-Id', augmentedContext.correlationId);
   }
 
-  logger.info('request:start', getStoreData());
+  logger.info('REQUEST_START', augmentedContext);
 
   res.on('finish', () => {
     const durationMs = Date.now() - startTime;
     // Always read latest context
     const finishedContext = {
-      ...getStoreData(),
+      ...augmentedContext,
       statusCode: res.statusCode,
       durationMs,
     };
-    logger.info('request:finish', finishedContext);
+    logger.info('REQUEST_FINISH', finishedContext);
   });
 
   res.on('close', () => {
     if (!res.writableEnded) {
       const abortedContext = {
-        ...getStoreData(),
+        ...augmentedContext,
         aborted: true,
       };
-      logger.info('request:aborted', abortedContext);
+      logger.info('REQUEST_ABORTED', abortedContext);
     }
   });
 
