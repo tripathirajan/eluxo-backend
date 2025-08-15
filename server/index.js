@@ -2,6 +2,11 @@
 const express = require('express');
 
 // custom module imports
+const {
+  prettyLogger: { showMsg },
+} = require('../services/logger');
+
+// custom plugins
 const useCors = require('./plugins/cors');
 const useCookies = require('./plugins/cookies');
 const useErrorHandler = require('./plugins/error-handler');
@@ -10,9 +15,7 @@ const { connectToMongo, closeConnection } = require('./plugins/database');
 const useHelmet = require('./plugins/security');
 const useSanitizer = require('./plugins/sanitizer');
 const useAppContext = require('./plugins/appContext');
-const {
-  prettyLogger: { showMsg },
-} = require('../services/logger');
+const useStaticAssets = require('./plugins/staticAssets');
 
 module.exports.setupServer = ({
   routes,
@@ -26,6 +29,7 @@ module.exports.setupServer = ({
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  useStaticAssets(app);
   useCors(app);
   useCookies(app);
   useAppContext(app);
