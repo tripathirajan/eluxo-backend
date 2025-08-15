@@ -2,7 +2,7 @@ const http = require('http');
 
 const { setupServer, applyErrorHandlers } = require('./server');
 const {
-  prettyLogger: { banner, notice, showMsg, showErrorMsg },
+  prettyLogger: { banner, notice, showMsg },
 } = require('./services/logger');
 const notFound = require('./middlewares/notFound');
 
