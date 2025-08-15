@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { prettyLogger: logger, error } = require('../../services/logger');
 const { dbConfig } = require('../../config/appConfig');
+const AppError = require('../../errors/AppError');
+const errorRegistry = require('../../errors/errorRegistry');
 
 let isConnected = false;
 
@@ -10,17 +12,23 @@ let isConnected = false;
  * If the URI is already set, it returns that.
  * If any required configuration is missing, it throws an error.
  * @returns {string} MongoDB connection URI
- * @throws {Error} If the database configuration is incomplete
+ * @throws {AppError} If the database configuration is incomplete
  */
 const getDbURI = () => {
   const { uri: dbURI } = dbConfig;
   // If dbURI is provided, use it directly
   if (!dbURI || typeof dbURI !== 'string') {
-    throw new Error('Missing or invalid DB_URI in environment');
+    throw new AppError(
+      'Missing or invalid DB_URI in environment',
+      500,
+      errorRegistry.GENERAL.DB_URI_INVALID
+    );
   }
   if (!dbURI.startsWith('mongodb://') && !dbURI.startsWith('mongodb+srv://')) {
-    throw new Error(
-      'Invalid dbURI format, must start with "mongodb://" or "mongodb+srv://"'
+    throw new AppError(
+      'Invalid dbURI format, must start with "mongodb://" or "mongodb+srv://"',
+      400,
+      errorRegistry.GENERAL.DB_URI_FORMAT_INVALID
     );
   }
   return dbURI;
@@ -33,11 +41,16 @@ const getDbURI = () => {
  * If the connection is already established, it does nothing.
  * It also sets up a listener for the SIGINT signal to close the connection gracefully.
  * @returns {Promise<void>} Resolves when the connection is established
- * @throws {Error} If the connection fails
+ * @throws {AppError} If the connection fails
  */
 async function connectToMongo() {
   const uri = getDbURI();
-  if (!uri) throw new Error('Missing MONGODB_URI in environment');
+  if (!uri)
+    throw new AppError(
+      'Missing MONGODB_URI in environment',
+      500,
+      errorRegistry.GENERAL.DB_URI_INVALID
+    );
 
   if (isConnected) return;
 
@@ -59,7 +72,11 @@ async function connectToMongo() {
 
 function getMongoose() {
   if (!isConnected) {
-    throw new Error('DB not connected. Call connectToMongo() first.');
+    throw new AppError(
+      'DB not connected. Call connectToMongo() first.',
+      500,
+      errorRegistry.GENERAL.DB_NOT_CONNECTED
+    );
   }
   return mongoose;
 }

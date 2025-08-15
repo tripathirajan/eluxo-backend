@@ -1,5 +1,7 @@
 const cors = require('cors');
 const { corsConfig } = require('../../config/appConfig');
+const AppError = require('../../errors/AppError');
+const errorRegistry = require('../../errors/errorRegistry');
 
 /**
  * Get the list of allowed origins for CORS.
@@ -29,7 +31,13 @@ function useCors(app) {
         allowedOrigins.includes(origin) ||
         allowedOrigins.includes('*')
           ? cb(null, true)
-          : cb(new Error('Not allowed by CORS')),
+          : cb(
+              new AppError(
+                'Not allowed by CORS',
+                403,
+                errorRegistry.GENERAL.CORS_NOT_ALLOWED
+              )
+            ),
       credentials: corsConfig.credentials || true,
       allowedHeaders,
       methods: allowedMethods,

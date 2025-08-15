@@ -1,0 +1,27 @@
+/**
+ * Central registry of error codes for consistent use across the app.
+ * This helps avoid magic strings in code and ensures consistency.
+ */
+module.exports = {
+  AUTH: {
+    INVALID_TOKEN: 'AUTH_INVALID_TOKEN',
+    UNAUTHORIZED: 'AUTH_UNAUTHORIZED',
+  },
+  USER: {
+    NOT_FOUND: 'USER_NOT_FOUND',
+    ALREADY_EXISTS: 'USER_ALREADY_EXISTS',
+  },
+  PRODUCT: {
+    NOT_FOUND: 'PRODUCT_NOT_FOUND',
+  },
+  GENERAL: {
+    INTERNAL_ERROR: 'INTERNAL_SERVER_ERROR',
+    BAD_REQUEST: 'BAD_REQUEST',
+    UNKNOWN: 'UNKNOWN_ERROR',
+    CORS_NOT_ALLOWED: 'CORS_NOT_ALLOWED',
+    DB_URI_INVALID: 'DB_URI_INVALID',
+    DB_URI_FORMAT_INVALID: 'DB_URI_FORMAT_INVALID',
+    DB_NOT_CONNECTED: 'DB_NOT_CONNECTED',
+    INVALID_STORE_INSTANCE: 'INVALID_STORE_INSTANCE',
+  },
+};
