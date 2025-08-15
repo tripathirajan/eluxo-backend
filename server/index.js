@@ -16,6 +16,7 @@ const useHelmet = require('./plugins/security');
 const useSanitizer = require('./plugins/sanitizer');
 const useAppContext = require('./plugins/appContext');
 const useStaticAssets = require('./plugins/staticAssets');
+const useRequestLogger = require('./plugins/request-logger');
 
 module.exports.setupServer = ({
   routes,
@@ -32,7 +33,9 @@ module.exports.setupServer = ({
   useStaticAssets(app);
   useCors(app);
   useCookies(app);
+  useRequestLogger(app);
   useAppContext(app);
+
   if (typeof customMiddlewares === 'function') customMiddlewares(app);
 
   if (typeof routes === 'function') routes(app);
