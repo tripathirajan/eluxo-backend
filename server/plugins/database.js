@@ -45,10 +45,10 @@ async function connectToMongo() {
     await mongoose.connect(uri);
 
     isConnected = true;
-    logger.showMsg('✅ Connected to MongoDB via Mongoose');
+    logger.showMsg('✅ DB connection established');
   } catch (err) {
-    logger.showErrorMsg('❌ MongoDB connection error');
-    error('MongoDB connection failed', {
+    logger.showErrorMsg('❌ DB connection error');
+    error('DB connection failed', {
       error: err.message,
       stack: err.stack,
     });
@@ -59,7 +59,7 @@ async function connectToMongo() {
 
 function getMongoose() {
   if (!isConnected) {
-    throw new Error('Mongoose not connected. Call connectToMongo() first.');
+    throw new Error('DB not connected. Call connectToMongo() first.');
   }
   return mongoose;
 }

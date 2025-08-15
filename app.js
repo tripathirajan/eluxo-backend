@@ -19,8 +19,7 @@ const showAppBanner = ({ host, port }) => {
   showMsg(`🖥️  Host: ${host === '::' ? 'localhost' : host}`);
   showMsg(`🔌 Port: ${port}`);
   showMsg(`💻 Environment: ${process.env.NODE_ENV || 'development'}`);
-
-  notice(`Press Ctrl+C to stop the server`);
+  notice(`Press Ctrl+C to gracefully stop the server`);
 };
 /**
  * Server setup
