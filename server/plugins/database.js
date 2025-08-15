@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { prettyLogger: logger, error } = require('../../services/logger');
-const { dbConfig } = require('../../config/appConfig');
+const { dbConfig } = require('../../config').appConfig;
+const { consoleLogger, logger } = require('../../services/logger');
 const AppError = require('../../errors/AppError');
 const errorRegistry = require('../../errors/errorRegistry');
 
@@ -58,10 +58,10 @@ async function connectToMongo() {
     await mongoose.connect(uri);
 
     isConnected = true;
-    logger.showMsg('✅ DB connection established');
+    consoleLogger.showInfo('✅ DB connection established');
   } catch (err) {
-    logger.showErrorMsg('❌ DB connection error');
-    error('DB connection failed', {
+    consoleLogger.showError('❌ DB connection error');
+    logger.error('DB connection failed', {
       error: err.message,
       stack: err.stack,
     });

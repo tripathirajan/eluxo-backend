@@ -1,5 +1,5 @@
 const cors = require('cors');
-const { corsConfig } = require('../../config/appConfig');
+const { corsConfig } = require('../../config').appConfig;
 const AppError = require('../../errors/AppError');
 const errorRegistry = require('../../errors/errorRegistry');
 

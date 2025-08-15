@@ -1,16 +1,15 @@
 const { getStoreData } = require('../../services/store');
 
-const logger = require('../../services/logger');
+const { logger } = require('../../services/logger');
 
 function requestLogger(req, res, next) {
   const startTime = Date.now();
   const context = getStoreData() || {};
+  const reqData = logger.serializeRequest(req);
   // Only add/override ip/method/path, keep existing correlationId/requestId
   const augmentedContext = {
+    ...reqData,
     ...context,
-    ip: req.ip,
-    method: req.method,
-    path: req.originalUrl || req.url,
     userId: (req.user && req.user.id) || undefined,
   };
 
@@ -18,12 +17,16 @@ function requestLogger(req, res, next) {
   if (augmentedContext.correlationId) {
     res.setHeader('X-Correlation-Id', augmentedContext.correlationId);
   }
+  if (augmentedContext.requestId) {
+    res.setHeader('X-Request-Id', augmentedContext.requestId);
+  }
   res.on('finish', () => {
     const durationMs = Date.now() - startTime;
+    const resData = logger.serializeResponse(res);
     // Always read latest context
     const finishedContext = {
+      ...resData,
       ...augmentedContext,
-      statusCode: res.statusCode,
       durationMs,
     };
     logger.info('incoming_request_finished', finishedContext);

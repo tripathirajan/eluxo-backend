@@ -1,9 +1,7 @@
 const http = require('http');
 
 const { setupServer, applyErrorHandlers } = require('./server');
-const {
-  prettyLogger: { banner, notice, showMsg },
-} = require('./services/logger');
+const { consoleLogger } = require('./services/logger');
 const notFound = require('./middlewares/notFound');
 const routes = require('./routes');
 
@@ -16,17 +14,20 @@ const app = setupServer({
 });
 
 const showAppBanner = ({ host, port }) => {
-  banner('Eluxo');
-  showMsg('🚀 Server running');
-  showMsg(`🖥️  Host: ${host === '::' ? 'localhost' : host}`);
-  showMsg(`🔌 Port: ${port}`);
-  showMsg(`💻 Environment: ${process.env.NODE_ENV || 'development'}`);
-  notice(`Press Ctrl+C to gracefully stop the server`);
+  consoleLogger.banner('Eluxo');
+  consoleLogger.showInfo('🚀 Server running');
+  consoleLogger.showInfo(`🖥️  Host: ${host === '::' ? 'localhost' : host}`);
+  consoleLogger.showInfo(`🔌 Port: ${port}`);
+  consoleLogger.showInfo(
+    `💻 Environment: ${process.env.NODE_ENV || 'development'}`
+  );
+  consoleLogger.notice(`Press Ctrl+C to gracefully stop the server`);
 };
 /**
  * Server setup
  */
 const server = http.createServer(app);
+
 server.listen(process.env.PORT || 3000, () => {
   const address = server.address();
   const host = typeof address === 'string' ? address : address.address;

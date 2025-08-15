@@ -2,9 +2,7 @@
 const express = require('express');
 
 // custom module imports
-const {
-  prettyLogger: { showMsg },
-} = require('../services/logger');
+const { consoleLogger } = require('../services/logger');
 
 // custom plugins
 const useCors = require('./plugins/cors');
@@ -35,8 +33,8 @@ module.exports.setupServer = ({
   useStaticAssets(app);
   useCors(app);
   useCookies(app);
-  useRequestLogger(app);
   useAppContext(app);
+  useRequestLogger(app);
 
   if (typeof customMiddlewares === 'function') customMiddlewares(app);
 
@@ -54,7 +52,7 @@ module.exports.applyErrorHandlers = (app, server) => {
   process.on('SIGINT', async () => {
     await closeConnection();
     server.close(() => {
-      showMsg('Server has been shut down gracefully');
+      consoleLogger.showInfo('Server has been shut down gracefully');
       // eslint-disable-next-line no-process-exit
       process.exit(0);
     });

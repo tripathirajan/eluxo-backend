@@ -1,4 +1,4 @@
-const logger = require('../../services/logger');
+const { logger } = require('../../services/logger');
 
 module.exports = () => {
   process.on('uncaughtException', (err) => {
