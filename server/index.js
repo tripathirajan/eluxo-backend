@@ -1,8 +1,7 @@
+// package imports
 const express = require('express');
-const loadEnv = require('./plugins/env');
-// it should load before any import
-loadEnv();
 
+// custom module imports
 const useCors = require('./plugins/cors');
 const useCookies = require('./plugins/cookies');
 const useErrorHandler = require('./plugins/error-handler');
@@ -10,7 +9,6 @@ const handleCrashes = require('./plugins/crash-handler');
 const { connectToMongo, closeConnection } = require('./plugins/database');
 const useHelmet = require('./plugins/security');
 const useSanitizer = require('./plugins/sanitizer');
-const useConfigReader = require('./plugins/configReader');
 const useAppContext = require('./plugins/appContext');
 const {
   prettyLogger: { showMsg },
@@ -22,7 +20,6 @@ module.exports.setupServer = ({
   postRouteMiddleware,
 }) => {
   const app = express();
-  useConfigReader(app);
   connectToMongo();
   useHelmet(app);
   useSanitizer(app);

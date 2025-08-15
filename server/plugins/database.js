@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { prettyLogger: logger, error } = require('../../services/logger');
-const getConfig = require('../../config/env');
+const { dbConfig } = require('../../config/appConfig');
 
 let isConnected = false;
 
@@ -13,7 +13,7 @@ let isConnected = false;
  * @throws {Error} If the database configuration is incomplete
  */
 const getDbURI = () => {
-  const { uri: dbURI } = getConfig().db;
+  const { uri: dbURI } = dbConfig;
   // If dbURI is provided, use it directly
   if (!dbURI || typeof dbURI !== 'string') {
     throw new Error('Missing or invalid DB_URI in environment');
