@@ -14,9 +14,9 @@ function requestLogger(req, res, next) {
   };
   setStore(augmentedContext);
 
-  // Ensure X-Request-Id is returned to client (at earliest)
-  if (augmentedContext.requestId) {
-    res.setHeader('X-Request-Id', augmentedContext.requestId);
+  // Ensure X-Correlation-Id is returned to client (at earliest)
+  if (augmentedContext.correlationId) {
+    res.setHeader('X-Correlation-Id', augmentedContext.correlationId);
   }
 
   logger.info('request:start', getStoreData());
