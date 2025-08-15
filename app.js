@@ -5,12 +5,14 @@ const {
   prettyLogger: { banner, notice, showMsg },
 } = require('./services/logger');
 const notFound = require('./middlewares/notFound');
+const routes = require('./routes');
 
 const app = setupServer({
   postRouteMiddleware: (appInstance) => {
     // not found middleware
     appInstance.use(notFound);
   },
+  routes,
 });
 
 const showAppBanner = ({ host, port }) => {
