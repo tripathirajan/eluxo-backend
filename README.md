@@ -33,16 +33,20 @@ Eluxo is a modern full-stack e-commerce platform. This repository contains the b
 3. **Create a `.env` file in the root and configure it**
 
    ```
+   NODE_ENV=local
    PORT=3300
-   ALLOWED_ORIGINS=http://localhost:9000,http://127.0.0.1:9000
-   MONGODB_URI=mongodb://<username>:<pwd>@<host>:<port>/eluxo
-
+   DB_URI=mongodb://<username>:<password>@localhost:27017/eluxo
+   APP_SECRET="app-secret"
+   CORS_ALLOWED_HEADERS="Content-Type,Authorization,X-Requested-With"
+   CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+   CORS_ALLOWED_ORIGINS ="http://localhost:9000,http://127.0.0.1:9000"
    ```
 
 4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+
+```bash
+npm run dev
+```
 
 ---
 

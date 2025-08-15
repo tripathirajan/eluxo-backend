@@ -1,12 +1,10 @@
 /* eslint-disable security/detect-object-injection */
 const helmet = require('helmet');
-const getConfig = require('../../config/env');
+const { helmetConfig } = require('../../config/appConfig');
 const { allowedHelmetKeys } = require('../../config/constant');
 
-const { helmet: helmetOptions } = getConfig();
-
 function useHelmet(app) {
-  const { contentSecurityPolicy = false, hsts, ...other } = helmetOptions || {};
+  const { contentSecurityPolicy = false, hsts, ...other } = helmetConfig || {};
 
   // Apply base helmet config
   app.use(helmet({ contentSecurityPolicy }));

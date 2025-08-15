@@ -1,16 +1,28 @@
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
-// import config based on env
+process.env.DOTENV_LOG = 'false';
 
-const env = process.env.NODE_ENV || 'local';
-const allowedEnvFiles = ['local', 'staging', 'production'];
+const dotenvFlow = require('dotenv-flow');
 
-const readEnvConfig = () => {
-  if (!allowedEnvFiles.includes(env)) throw new Error('Env not allowed!');
-  // Dynamically require only the needed config file
-  return require(`./${env}`);
-};
+const envSchema = require('./schema');
+const {
+  prettyLogger: { showErrorMsg },
+} = require('../../services/logger');
 
-const getConfig = () => readEnvConfig();
+// Load env vars based on NODE_ENV
+dotenvFlow.config({
+  node_env: process.env.NODE_ENV || 'local',
+  override: true,
+  debug: process.env.NODE_ENV === 'local',
+});
 
-module.exports = getConfig;
+const parsedEnv = envSchema.safeParse(process.env);
+
+if (!parsedEnv.success) {
+  showErrorMsg('❌ Invalid environment configuration:');
+  parsedEnv.error.errors.forEach((err) =>
+    showErrorMsg(`- ${err.path.join('.')}: ${err.message}`)
+  );
+  // eslint-disable-next-line no-process-exit
+  process.exit(1);
+}
+
+module.exports = Object.freeze(parsedEnv.data);
