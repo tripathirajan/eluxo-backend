@@ -10,6 +10,7 @@ function requestLogger(req, res, next) {
     ip: req.ip,
     method: req.method,
     path: req.originalUrl || req.url,
+    userId: (req.user && req.user.id) || undefined,
   };
   setStore(augmentedContext);
 
