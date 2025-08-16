@@ -15,9 +15,9 @@ dotenvFlow.config({
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  consoleLogger.showErrorMsg('❌ Invalid environment configuration:');
-  parsedEnv.error.errors.forEach((err) =>
-    consoleLogger.showErrorMsg(`- ${err.path.join('.')}: ${err.message}`)
+  consoleLogger.showError('❌ Invalid environment configuration:');
+  parsedEnv.error.issues.forEach((err) =>
+    consoleLogger.showError(`- ${err.path.join('.')}: ${err.message}`)
   );
   // eslint-disable-next-line no-process-exit
   process.exit(1);

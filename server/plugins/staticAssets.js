@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { getRootDirPath } = require('../../utils/appPath');
+const { getRootDirPath } = require('../../utils/core');
 
 const PUBLIC_PATH = path.join(getRootDirPath(), 'public');
 

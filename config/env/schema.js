@@ -14,8 +14,13 @@ const envSchema = z
     // Security
     APP_SECRET: z
       .string()
-      .min(32, 'APP_SECRET must be at least 32 characters long.')
-      .optional(),
+      .min(32, 'APP_SECRET must be at least 32 characters long.'),
+    JWT_ACCESS_SECRET: z
+      .string()
+      .min(32, 'JWT_ACCESS_SECRET must be at least 32 characters long.'),
+    JWT_REFRESH_SECRET: z
+      .string()
+      .min(32, 'JWT_REFRESH_SECRET must be at least 32 characters long.'),
 
     // CORS
     CORS_ALLOWED_ORIGINS: z.string().optional(),
@@ -23,6 +28,8 @@ const envSchema = z
       .string()
       .default('Content-Type,Authorization,X-Requested-With'),
     CORS_ALLOWED_METHODS: z.string().default('GET,POST,PUT,DELETE,OPTIONS'),
+    JWT_ACCESS_EXPIRY: z.string().default('15m'),
+    JWT_REFRESH_EXPIRY: z.string().default('7d'),
   })
   .superRefine((val, ctx) => {
     // Env-specific rules

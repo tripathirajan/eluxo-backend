@@ -1,9 +1,7 @@
-const { randomString } = require('../utils/random');
-const {
-  prettyLogger: { showMsg },
-} = require('../services/logger');
+const { randomHexString } = require('../utils/crypto');
+const { showInfo } = require('../services/logger/consoleLogger');
 
 (async function generateHash() {
-  const hashValue = randomString(32);
-  showMsg(`Random String: ${hashValue}`);
+  const hashValue = randomHexString(32);
+  showInfo(`Random String: ${hashValue}`);
 })();
