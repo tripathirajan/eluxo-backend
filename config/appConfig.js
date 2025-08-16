@@ -20,8 +20,13 @@ const helmetConfig = {
 
 const corsConfig = {
   origin: env.CORS_ALLOWED_ORIGINS || '*',
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'X-Correlation-Id',
+  ],
   credentials: true,
 };
 

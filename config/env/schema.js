@@ -30,6 +30,9 @@ const envSchema = z
     CORS_ALLOWED_METHODS: z.string().default('GET,POST,PUT,DELETE,OPTIONS'),
     JWT_ACCESS_EXPIRY: z.string().default('15m'),
     JWT_REFRESH_EXPIRY: z.string().default('7d'),
+    COOKIE_DOMAIN: z.string().default('localhost'),
+    REFRESH_COOKIE_NAME: z.string().default('eluxo_rt'),
+    REFRESH_COOKIE_PATH: z.string().default('/api/v1/auth/refresh'),
   })
   .superRefine((val, ctx) => {
     // Env-specific rules
