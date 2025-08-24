@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { APP_SECRET } = require('../config/env');
 
-const DEFAULT_SALT_ROUNDS = 10;
+const DEFAULT_SALT_ROUNDS = 12;
 
 /**
  * Generate a random hexadecimal string
@@ -39,6 +39,14 @@ function verifyHMAC(data, signature) {
  */
 function randomBase64String(length = 16) {
   return crypto.randomBytes(length).toString('base64');
+}
+
+/**
+ * Generate a random UUID
+ * @returns {string} - Randomly generated UUID
+ */
+function randomUUID() {
+  return crypto.randomUUID();
 }
 
 /**
@@ -83,4 +91,5 @@ module.exports = {
   generateHash,
   generateHashWithSalt,
   verifyHash,
+  randomUUID,
 };

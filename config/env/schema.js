@@ -33,6 +33,8 @@ const envSchema = z
     COOKIE_DOMAIN: z.string().default('localhost'),
     REFRESH_COOKIE_NAME: z.string().default('eluxo_rt'),
     REFRESH_COOKIE_PATH: z.string().default('/api/v1/auth/refresh'),
+    XSRF_COOKIE_NAME: z.string().default('XSRF-TOKEN'),
+    XSRF_COOKIE_PATH: z.string().default('/api/v1/auth/refresh'),
   })
   .superRefine((val, ctx) => {
     // Env-specific rules

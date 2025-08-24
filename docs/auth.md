@@ -23,7 +23,7 @@
 ### Flow
 
 1. **Register**
-   - User submits registration details → Server validates and hashes password → User record created.
+   - User submits registration details → Server validates and hashes password → User record created → Access + Refresh tokens issued (auto-login).
 2. **Login**
    - User submits credentials → Server validates → Access + Refresh tokens issued.
    - Access token sent in response body, refresh token set as secure HttpOnly cookie.
@@ -38,8 +38,9 @@
 
 ```mermaid
 flowchart TD
-    A[Register] -->|POST /register| B[User Created]
-    C[Login] -->|POST /login| D[Issue Access+Refresh Tokens]
+    A[Register] -->|POST /register| B[User Created & Tokens Issued]
+    B --> D[Issue Access+Refresh Tokens]
+    C[Login] -->|POST /login| D
     D --> E[Access Token -> API Request]
     E -->|Valid| F[Protected Route Access]
     E -->|Expired| G[POST /refresh]
@@ -56,6 +57,7 @@ flowchart TD
 - Refresh tokens should be rotated on each use.
 - Role checks should be enforced using `roleGuard` middleware.
 - Keep security middlewares (helmet, rate-limiters) active on auth routes.
+- `register` response includes `isNewUser: true` to indicate auto-login from registration flow.
 
 ### Plan for This Week — Auth & AuthZ, Auth Architecture, Schema
 
@@ -97,14 +99,14 @@ flowchart TD
 
 ### Stories
 
-| Story                                  | Priority | Story Point | Milestone | Description                                                                                        |
-| -------------------------------------- | -------- | ----------- | --------- | -------------------------------------------------------------------------------------------------- |
-| Implement User Schema & Model          | High     | 5           | M1        | Create Mongoose schema for User with secure password hashing and refresh token subdocument.        |
-| Registration API                       | High     | 3           | M1        | Build registration endpoint with validation and hashed password storage.                           |
-| Login API with Access & Refresh Tokens | High     | 5           | M1        | Create login route issuing short-lived access token and long-lived refresh token in secure cookie. |
-| Token Refresh Endpoint                 | High     | 3           | M1        | Implement endpoint to validate and rotate refresh tokens.                                          |
-| Auth Middleware (authGuard, roleGuard) | Medium   | 3           | M2        | Create middleware to protect routes and enforce role-based access.                                 |
-| Security Enhancements                  | Medium   | 2           | M2        | Apply helmet, rate limiter, and input sanitization on auth routes.                                 |
-| Forgot & Reset Password Flow           | Low      | 3           | M3        | Implement password reset token flow with email delivery.                                           |
-| OTP/2FA Integration                    | Low      | 5           | M3        | Add optional second factor for seller/admin accounts.                                              |
-| Testing & Postman Collection           | High     | 3           | M2        | Prepare automated and manual test coverage for all auth endpoints.                                 |
+| Story                                  | Priority | Story Point | Milestone | Description                                                                                                                          |
+| -------------------------------------- | -------- | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Implement User Schema & Model          | High     | 5           | M1        | Create Mongoose schema for User with secure password hashing and refresh token subdocument.                                          |
+| Registration API                       | High     | 3           | M1        | Build registration endpoint with validation, hashed password storage, and immediate token issuance (auto-login with isNewUser flag). |
+| Login API with Access & Refresh Tokens | High     | 5           | M1        | Create login route issuing short-lived access token and long-lived refresh token in secure cookie.                                   |
+| Token Refresh Endpoint                 | High     | 3           | M1        | Implement endpoint to validate and rotate refresh tokens.                                                                            |
+| Auth Middleware (authGuard, roleGuard) | Medium   | 3           | M2        | Create middleware to protect routes and enforce role-based access.                                                                   |
+| Security Enhancements                  | Medium   | 2           | M2        | Apply helmet, rate limiter, and input sanitization on auth routes.                                                                   |
+| Forgot & Reset Password Flow           | Low      | 3           | M3        | Implement password reset token flow with email delivery.                                                                             |
+| OTP/2FA Integration                    | Low      | 5           | M3        | Add optional second factor for seller/admin accounts.                                                                                |
+| Testing & Postman Collection           | High     | 3           | M2        | Prepare automated and manual test coverage for all auth endpoints.                                                                   |
