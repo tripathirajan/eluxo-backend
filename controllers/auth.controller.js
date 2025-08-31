@@ -4,24 +4,24 @@ const cryptoUtils = require('../utils/crypto');
 
 const User = require('../models/user.model');
 const {
-  generateAccessToken,
+  issueAccessToken,
   issueRefreshToken,
   rotateRefreshToken,
   revokeRefreshToken,
   revokeAllForUser,
   listActiveSessions,
 } = require('../services/token.service');
-const { authCookieConfig } = require('../config/authCookieConfig');
+const authCookieConfig = require('../config/authCookieConfig');
 const { ResponseError, USER, AUTH } = require('../errors');
 const envVar = require('../config/env');
 
 /** helper to set refresh + csrf cookies */
 function setRefreshCookies(res, refreshDoc) {
   // refresh cookie (HttpOnly)
-  res.cookie(authCookieConfig.name, refreshDoc.token, authCookieConfig.options);
+  res.cookie(authCookieConfig.name, refreshDoc.token, authCookieConfig);
   res.cookie(envVar.XSRF_COOKIE_NAME, refreshDoc.csrfToken, {
     httpOnly: false,
-    secure: authCookieConfig.options.secure,
+    secure: authCookieConfig.secure,
     sameSite: 'lax',
     path: envVar.XSRF_COOKIE_PATH,
   });
@@ -30,8 +30,8 @@ function setRefreshCookies(res, refreshDoc) {
 /** helper to clear refresh cookie */
 function clearRefreshCookie(res) {
   res.clearCookie(authCookieConfig.name, {
-    path: authCookieConfig.options.path,
-    domain: authCookieConfig.options.domain,
+    path: authCookieConfig.path,
+    domain: authCookieConfig.domain,
   });
   res.clearCookie(envVar.XSRF_COOKIE_NAME, { path: envVar.XSRF_COOKIE_PATH });
 }
@@ -67,13 +67,13 @@ exports.register = async (req, res, next) => {
       name,
       role,
     });
-    const accessToken = generateAccessToken({
-      sub: String(user._id),
+    const accessToken = issueAccessToken({
+      sub: user._id,
       role: user.role,
     });
 
     const refreshDoc = await issueRefreshToken(user._id, {
-      fingerprint: deviceFingerprint,
+      fingerprint: deviceFingerprint || res.locals.deviceFingerprint,
       userAgent: req.headers['user-agent'],
       ip: req.ip,
     });
@@ -121,13 +121,13 @@ exports.login = async (req, res, next) => {
         new ResponseError(USER.USER_INACTIVE, 'Account disabled', 403)
       );
 
-    const accessToken = generateAccessToken({
-      sub: String(user._id),
+    const accessToken = issueAccessToken({
+      sub: user._id,
       role: user.role,
     });
 
     const refreshDoc = await issueRefreshToken(user._id, {
-      fingerprint: deviceFingerprint,
+      fingerprint: deviceFingerprint || res.locals.deviceFingerprint,
       userAgent: req.headers['user-agent'],
       ip: req.ip,
     });
@@ -152,20 +152,20 @@ exports.refresh = async (req, res, next) => {
         new ResponseError(AUTH.TOKEN_MISSING, 'Refresh token missing', 401)
       );
 
-    const csrfHeader = req.headers['x-csrf-token'];
+    const csrfToken = req.cookies[envVar.XSRF_COOKIE_NAME];
 
     const newDoc = await rotateRefreshToken(
       refreshTokenCookie,
       {
-        fingerprint: req.body.deviceFingerprint,
+        fingerprint: req.body.deviceFingerprint || res.locals.deviceFingerprint,
         userAgent: req.headers['user-agent'],
         ip: req.ip,
       },
-      csrfHeader
+      csrfToken
     );
 
-    const accessToken = generateAccessToken({
-      sub: String(newDoc.user),
+    const accessToken = issueAccessToken({
+      sub: newDoc.user._id,
       role: req.user.role,
     });
 

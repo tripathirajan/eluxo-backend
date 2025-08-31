@@ -136,12 +136,8 @@ async function listActiveSessions(userId) {
  * @param {string} userId
  * @returns {string} - JWT Access Token
  */
-function issueAccessToken(userId) {
-  return jwtUtil.signToken(
-    { sub: String(userId) },
-    ACCESS_TOKEN_SECRET,
-    ACCESS_TOKEN_EXPIRY
-  );
+function issueAccessToken(payload) {
+  return jwtUtil.signToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY);
 }
 
 /**

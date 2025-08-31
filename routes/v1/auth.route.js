@@ -1,5 +1,7 @@
 const authRoute = require('express').Router();
 const authController = require('../../controllers/auth.controller');
+const authGuard = require('../../middlewares/authGuard');
+const fingerprintMiddleware = require('../../middlewares/fingerprint');
 
 /**
  * @swagger
@@ -38,7 +40,7 @@ const authController = require('../../controllers/auth.controller');
  *       403:
  *         description: Forbidden
  */
-authRoute.post('/login', authController.login);
+authRoute.post('/login', fingerprintMiddleware, authController.login);
 
 /**
  * @swagger
@@ -53,9 +55,13 @@ authRoute.post('/login', authController.login);
  *           schema:
  *             type: object
  *             required:
+ *               - name
  *               - email
  *               - password
  *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
  *               email:
  *                 type: string
  *                 format: email
@@ -70,7 +76,7 @@ authRoute.post('/login', authController.login);
  *       400:
  *         description: Bad request
  */
-authRoute.post('/register', authController.register);
+authRoute.post('/register', fingerprintMiddleware, authController.register);
 
 /**
  * @swagger
@@ -96,7 +102,7 @@ authRoute.post('/register', authController.register);
  *       401:
  *         description: Invalid or expired refresh token
  */
-authRoute.post('/refresh', authController.refresh);
+authRoute.post('/refresh', authGuard, authController.refresh);
 
 /**
  * @swagger
@@ -112,7 +118,7 @@ authRoute.post('/refresh', authController.refresh);
  *       401:
  *         description: Unauthorized
  */
-authRoute.post('/logout', authController.logout);
+authRoute.post('/logout', authGuard, authController.logout);
 
 /**
  * @swagger
@@ -128,7 +134,7 @@ authRoute.post('/logout', authController.logout);
  *       401:
  *         description: Unauthorized
  */
-authRoute.post('/logoutAll', authController.logoutAll);
+authRoute.post('/logoutAll', authGuard, authController.logoutAll);
 
 /**
  * @swagger
@@ -161,6 +167,6 @@ authRoute.post('/logoutAll', authController.logoutAll);
  *       401:
  *         description: Unauthorized
  */
-authRoute.post('/sessions', authController.sessions);
+authRoute.post('/sessions', authGuard, authController.sessions);
 
 module.exports = authRoute;
