@@ -36,7 +36,16 @@ function clearRefreshCookie(res) {
   res.clearCookie(envVar.XSRF_COOKIE_NAME, { path: envVar.XSRF_COOKIE_PATH });
 }
 
-/** Register */
+/**
+ * Register a new user
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @description Handles user registration
+ * @body { email, password, name, role, deviceFingerprint }
+ * @throws {ResponseError} 400 if email already exists
+ * @returns
+ */
 exports.register = async (req, res, next) => {
   try {
     const { email, password, name, role, deviceFingerprint } = req.body;
@@ -82,7 +91,17 @@ exports.register = async (req, res, next) => {
   }
 };
 
-/** Login */
+/**
+ * Login a user
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @description
+ * Handles user login
+ * @body { email, password, deviceFingerprint }
+ * @throws {ResponseError} 401 if credentials are invalid
+ * @returns
+ */
 exports.login = async (req, res, next) => {
   try {
     const { email, password, deviceFingerprint } = req.body;

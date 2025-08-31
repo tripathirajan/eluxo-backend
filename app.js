@@ -14,13 +14,15 @@ const app = setupServer({
 });
 
 const showAppBanner = ({ host, port }) => {
+  const serverHost = host === '::' ? 'localhost' : host;
   consoleLogger.banner('Eluxo');
   consoleLogger.showInfo('🚀 Server running');
-  consoleLogger.showInfo(`🖥️  Host: ${host === '::' ? 'localhost' : host}`);
+  consoleLogger.showInfo(`🖥️  Host: ${serverHost}`);
   consoleLogger.showInfo(`🔌 Port: ${port}`);
   consoleLogger.showInfo(
     `💻 Environment: ${process.env.NODE_ENV || 'development'}`
   );
+  consoleLogger.showInfo(`🗓️  API Docs: http://${serverHost}:${port}/docs`);
   consoleLogger.notice(`Press Ctrl+C to gracefully stop the server`);
 };
 /**

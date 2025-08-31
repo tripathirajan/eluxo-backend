@@ -1,5 +1,5 @@
 const AppError = require('../../errors/AppError');
-const logger = require('../../services/logger');
+const { logger } = require('../../services/logger');
 const errorRegistry = require('../../errors/errorRegistry');
 
 const useErrorHandler = (app) => {

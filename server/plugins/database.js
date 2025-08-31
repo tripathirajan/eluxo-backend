@@ -88,9 +88,9 @@ module.exports = {
     if (isConnected) {
       await mongoose.connection.close();
       isConnected = false;
-      logger.showMsg('🔌 MongoDB connection closed');
+      consoleLogger.showInfo('🔌 MongoDB connection closed');
     } else {
-      logger.showMsg('🔌 No active MongoDB connection to close');
+      consoleLogger.showInfo('🔌 No active MongoDB connection to close');
     }
   },
 };

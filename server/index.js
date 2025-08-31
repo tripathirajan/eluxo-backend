@@ -16,6 +16,7 @@ const useAppContext = require('./plugins/appContext');
 const useStaticAssets = require('./plugins/staticAssets');
 const useRequestLogger = require('./plugins/request-logger');
 const useIgnoreRoutes = require('./plugins/ignoreRoutes');
+const useSwagger = require('./plugins/swagger');
 
 module.exports.setupServer = ({
   routes,
@@ -28,6 +29,7 @@ module.exports.setupServer = ({
   useSanitizer(app);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  useSwagger(app);
 
   useIgnoreRoutes(app);
   useStaticAssets(app);

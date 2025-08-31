@@ -1,7 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 
 const chalk = require('chalk');
-const boxen = require('boxen').default;
+const boxen = require('boxen');
 const figlet = require('figlet');
 
 const prettyFormat = format.printf(({ message }) => message);
