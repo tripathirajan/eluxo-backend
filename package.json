@@ -10,6 +10,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.32.0",
+    "cross-env": "^10.0.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -18,13 +19,15 @@
     "eslint-plugin-prettier": "^5.5.3",
     "eslint-plugin-security": "^3.0.1",
     "husky": "^9.1.7",
+    "jest": "^30.0.5",
+    "mongodb-memory-server": "^10.2.0",
     "nodemon": "^3.1.10",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4"
   },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
@@ -34,7 +37,8 @@
     "build:test": "npm run lint && npm run format",
     "precommit": "npm run build:test",
     "show:envs": "grep -R \"process.env.\" ./server ./config",
-    "get:hash": "node ./scripts/generate-hash.js"
+    "get:hash": "node ./scripts/generate-hash.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -59,7 +63,7 @@
   "homepage": "https://github.com/tripathirajan/eluxo-backend#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "boxen": "^6.2.1",
+    "boxen": "5.1.2",
     "chalk": "^4.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

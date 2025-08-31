@@ -1,6 +1,6 @@
 const { ResponseError, AUTH } = require('../errors');
 
-function roleGuard(...allowed) {
+function roleGuard(allowed = ['admin']) {
   return (req, res, next) => {
     if (!req.user)
       return next(new ResponseError(AUTH.UNAUTHORIZED, 'Unauthorized', 401));

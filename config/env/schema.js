@@ -9,7 +9,6 @@ const envSchema = z
 
     // DB configs
     DB_URI: z.string().optional(),
-    TEST_DB_URI: z.string().optional(),
 
     // Security
     APP_SECRET: z
@@ -43,13 +42,6 @@ const envSchema = z
         code: z.ZodIssueCode.custom,
         message: 'DB_URI is required in production environment',
         path: ['DB_URI'],
-      });
-    }
-    if (val.NODE_ENV === 'test' && !val.TEST_DB_URI) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'TEST_DB_URI is required in test environment',
-        path: ['TEST_DB_URI'],
       });
     }
     if (['production', 'staging'].includes(val.NODE_ENV) && !val.APP_SECRET) {

@@ -9,6 +9,7 @@ const ONE_DAY_MS = 24 * ONE_HOUR_MS;
  * Parses a duration string (e.g., "15m", "12h", "7d") into milliseconds.
  * @param {string} val - The duration string to parse.
  * @returns {number} - The duration in milliseconds.
+ * @default 7d
  */
 function parseDurationToMs(val = '7d') {
   const m = /^(\d+)([smhd])$/.exec(String(val).trim());
@@ -28,8 +29,6 @@ function parseDurationToMs(val = '7d') {
       multi = ONE_HOUR_MS;
       break;
     case 'd':
-      multi = ONE_DAY_MS;
-      break;
     default:
       multi = ONE_DAY_MS;
   }

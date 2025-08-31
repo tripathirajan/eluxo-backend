@@ -50,6 +50,15 @@ function randomUUID() {
 }
 
 /**
+ * Generate a salt for hashing
+ * @param {number} [len=10] - The number of rounds to use for generating the salt
+ * @returns {string} - The generated salt
+ */
+function getSalt(len = 10) {
+  return bcrypt.genSaltSync(len);
+}
+
+/**
  * Generate a hash from the plaintext and salt
  * @param {string} planText
  * @param {string} salt
@@ -92,4 +101,5 @@ module.exports = {
   generateHashWithSalt,
   verifyHash,
   randomUUID,
+  getSalt,
 };
