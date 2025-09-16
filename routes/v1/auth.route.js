@@ -85,24 +85,14 @@ authRoute.post('/register', fingerprintMiddleware, authController.register);
  *     summary: Refresh access token using refresh token
  *     tags: [Auth]
  *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - refreshToken
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 description: Refresh token
+ *       required: false
  *     responses:
  *       200:
  *         description: Token refreshed successfully
  *       401:
  *         description: Invalid or expired refresh token
  */
-authRoute.post('/refresh', authGuard, authController.refresh);
+authRoute.post('/refresh', authController.refresh);
 
 /**
  * @swagger

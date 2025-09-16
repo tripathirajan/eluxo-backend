@@ -75,10 +75,19 @@ function slugify(text) {
     .replace(/--+/g, '-'); // collapse dashes
 }
 
+function cleanObject(obj) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, value]) => value !== '' && value !== undefined
+    )
+  );
+}
+
 module.exports = {
   uuid,
   otp,
   slugify,
+  cleanObject,
   getRootDirPath,
   parseDurationToMs,
 };
