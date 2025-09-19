@@ -37,7 +37,7 @@ const ratingSchema = z.object({
 
 // ========== Base Product Schema ==========
 const baseProductSchema = z.object({
-  title: z.string(),
+  name: z.string(),
   slug: z.string(),
   description: z.string().optional(),
   images: z.array(imageSchema).optional(),
