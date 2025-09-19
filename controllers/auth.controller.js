@@ -13,17 +13,17 @@ const {
 } = require('../services/token.service');
 const authCookieConfig = require('../config/authCookieConfig');
 const { ResponseError, USER, AUTH } = require('../errors');
-const envVar = require('../config/env');
+const getEnv = require('../config/env');
 
 /** helper to set refresh + csrf cookies */
 function setRefreshCookies(res, refreshDoc) {
   // refresh cookie (HttpOnly)
   res.cookie(authCookieConfig.name, refreshDoc.token, authCookieConfig);
-  res.cookie(envVar.XSRF_COOKIE_NAME, refreshDoc.csrfToken, {
+  res.cookie(getEnv('XSRF_COOKIE_NAME'), refreshDoc.csrfToken, {
     httpOnly: false,
     secure: authCookieConfig.secure,
     sameSite: 'lax',
-    path: envVar.XSRF_COOKIE_PATH,
+    path: getEnv('XSRF_COOKIE_PATH'),
   });
 }
 
@@ -33,7 +33,9 @@ function clearRefreshCookie(res) {
     path: authCookieConfig.path,
     domain: authCookieConfig.domain,
   });
-  res.clearCookie(envVar.XSRF_COOKIE_NAME, { path: envVar.XSRF_COOKIE_PATH });
+  res.clearCookie(getEnv('XSRF_COOKIE_NAME'), {
+    path: getEnv('XSRF_COOKIE_PATH'),
+  });
 }
 
 /**
@@ -152,12 +154,14 @@ exports.refresh = async (req, res, next) => {
         new ResponseError(AUTH.TOKEN_MISSING, 'Refresh token missing', 401)
       );
 
-    const csrfToken = req.cookies[envVar.XSRF_COOKIE_NAME];
+    const csrfToken = req.cookies[getEnv('XSRF_COOKIE_NAME')];
 
     const newDoc = await rotateRefreshToken(
       refreshTokenCookie,
       {
-        fingerprint: req.body.deviceFingerprint || res.locals.deviceFingerprint,
+        fingerprint:
+          (req.body && req.body.deviceFingerprint) ||
+          res.locals.deviceFingerprint,
         userAgent: req.headers['user-agent'],
         ip: req.ip,
       },
@@ -166,14 +170,14 @@ exports.refresh = async (req, res, next) => {
 
     const accessToken = issueAccessToken({
       sub: newDoc.user._id,
-      role: req.user.role,
+      role: newDoc.user.role,
     });
 
     setRefreshCookies(res, newDoc);
 
     return res.json({ accessToken });
   } catch (err) {
-    return next(err);
+    return next(new ResponseError(AUTH.TOKEN_INVALID, 'Invalid token', 401));
   }
 };
 
@@ -185,7 +189,7 @@ exports.logout = async (req, res, next) => {
     clearRefreshCookie(res);
     return res.status(204).send();
   } catch (err) {
-    return next(err);
+    return next(new ResponseError(AUTH.TOKEN_INVALID, 'Invalid token', 401));
   }
 };
 
@@ -198,7 +202,7 @@ exports.logoutAll = async (req, res, next) => {
     clearRefreshCookie(res);
     return res.status(204).send();
   } catch (err) {
-    return next(err);
+    return next(new ResponseError(AUTH.UNAUTHORIZED, 'Unauthorized', 401));
   }
 };
 
@@ -210,6 +214,6 @@ exports.sessions = async (req, res, next) => {
     const sessions = await listActiveSessions(req.user._id);
     return res.json({ sessions });
   } catch (err) {
-    return next(err);
+    return next(new ResponseError(AUTH.UNAUTHORIZED, 'Unauthorized', 401));
   }
 };

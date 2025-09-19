@@ -34,6 +34,9 @@ const envSchema = z
     REFRESH_COOKIE_PATH: z.string().default('/api/v1/auth/refresh'),
     XSRF_COOKIE_NAME: z.string().default('eluxo_xs'),
     XSRF_COOKIE_PATH: z.string().default('/api/v1/auth/refresh'),
+    CLOUDINARY_CLOUD_NAME: z.string().optional(),
+    CLOUDINARY_API_KEY: z.string().optional(),
+    CLOUDINARY_API_SECRET: z.string().optional(),
   })
   .superRefine((val, ctx) => {
     // Env-specific rules
@@ -50,6 +53,16 @@ const envSchema = z
         message:
           'APP_SECRET is required in production and staging environments',
         path: ['APP_SECRET'],
+      });
+    }
+    if (
+      !val.CLOUDINARY_CLOUD_NAME ||
+      !val.CLOUDINARY_API_KEY ||
+      !val.CLOUDINARY_API_SECRET
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Cloudinary configuration is required',
       });
     }
   });

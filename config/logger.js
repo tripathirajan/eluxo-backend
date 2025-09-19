@@ -1,7 +1,7 @@
-const envVar = require('./env');
+const getEnv = require('./env');
 
 const devEnvList = ['local', 'development'];
-const isDevEnv = devEnvList.includes(envVar.NODE_ENV);
+const isDevEnv = devEnvList.includes(getEnv('NODE_ENV'));
 
 module.exports = {
   level: process.env.LOG_LEVEL || 'info',

@@ -17,7 +17,6 @@ async function authGuard(req, res, next) {
     }
     const token = hdr.slice(7);
     const payload = verifyAccessToken(token);
-    console.log('payload:', payload, token);
     const user = await User.findById(payload.sub || payload.userId).select(
       '-passwordHash'
     );
