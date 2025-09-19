@@ -40,7 +40,7 @@ const adminProductRoute = express.Router();
  *                 type: string
  *               status:
  *                 type: string
- *                 enum: [active, inactive]
+ *                 enum: [active, draft, archived]
  *             required:
  *               - name
  *               - price
@@ -140,7 +140,7 @@ adminProductRoute.get(
  *                 type: string
  *               status:
  *                 type: string
- *                 enum: [active, inactive]
+ *                 enum: [active, draft, archived]
  *     responses:
  *       200:
  *         description: Product updated
@@ -202,7 +202,7 @@ adminProductRoute.delete(
  *             properties:
  *               status:
  *                 type: string
- *                 enum: [active, inactive]
+ *                 enum: [active, draft, archived]
  *             required:
  *               - status
  *     responses:

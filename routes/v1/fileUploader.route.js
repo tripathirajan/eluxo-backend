@@ -31,6 +31,7 @@ const fileUploadController = require('../../controllers/fileUpload.controller');
  *               - files
  *               - bucket
  *               - type
+ *               - prefix
  *             properties:
  *               files:
  *                 type: array
@@ -45,7 +46,7 @@ const fileUploadController = require('../../controllers/fileUpload.controller');
  *                 enum: [banner, thumbnail, cover, image]
  *               prefix:
  *                 type: string
- *                 description: Optional prefix (e.g., SKU, userId)
+ *                 description: prefix (e.g., SKU, userId)
  *     responses:
  *       201:
  *         description: Files uploaded successfully
@@ -78,6 +79,7 @@ fileUploadRouter.post(
  *               - file
  *               - bucket
  *               - type
+ *               - prefix
  *             properties:
  *               file:
  *                 type: string
@@ -90,7 +92,7 @@ fileUploadRouter.post(
  *                 enum: [banner, thumbnail, cover, image]
  *               prefix:
  *                 type: string
- *                 description: Optional prefix (e.g., SKU, userId)
+ *                 description: prefix (e.g., SKU, userId)
  *     responses:
  *       201:
  *         description: File uploaded successfully

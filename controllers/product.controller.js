@@ -147,10 +147,19 @@ exports.getProducts = asyncHandler(async (req, res) => {
   );
 });
 
-exports.getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id).populate('category');
+exports.getProductById = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id).populate({
+    path: 'category',
+    select: 'name slug',
+  });
   if (!product || product.status !== 'active')
-    return new ResponseError(PRODUCT.NOT_FOUND, 'Product not found', 404);
+    return next(
+      new ResponseError(
+        PRODUCT.NOT_FOUND,
+        `Product with ID ${req.params.id} not found`,
+        404
+      )
+    );
 
   return res.json(standardizeResponse({ success: true, data: product }));
 });
@@ -197,7 +206,15 @@ exports.getProductReviews = asyncHandler(async (req, res) => {
 exports.addProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
   const product = await Product.findById(req.params.id);
-  product.reviews.push({ user: req.user.id, rating, comment });
+  const existingReview = product.reviews.find(
+    (rev) => rev.user.toString() === req.user.id
+  );
+  if (existingReview) {
+    existingReview.rating = rating;
+    existingReview.comment = comment;
+  } else {
+    product.reviews.push({ user: req.user.id, rating, comment });
+  }
   await product.save();
   res.json(standardizeResponse({ success: true, data: product.reviews }));
 });

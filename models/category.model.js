@@ -56,19 +56,16 @@ const categorySchema = new Schema(
 
 // Pre-save middleware to build ancestors
 categorySchema.pre('save', async function onCategorySave(next) {
-  console.log('Pre-save hook triggered');
   if (!this.parent) {
     // No parent → reset ancestors
     this.ancestors = [];
     return next();
   }
   try {
-    console.log('Parent ID:', this.parent);
     const parentCategory = await mongoose
       .model('Category')
       .findById(this.parent)
       .lean();
-    console.log('Parent Category:', parentCategory);
     if (parentCategory) {
       this.ancestors = [
         ...(parentCategory.ancestors || []),

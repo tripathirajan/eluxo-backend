@@ -55,6 +55,16 @@ const envSchema = z
         path: ['APP_SECRET'],
       });
     }
+    if (
+      !val.CLOUDINARY_CLOUD_NAME ||
+      !val.CLOUDINARY_API_KEY ||
+      !val.CLOUDINARY_API_SECRET
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Cloudinary configuration is required',
+      });
+    }
   });
 
 module.exports = envSchema;
