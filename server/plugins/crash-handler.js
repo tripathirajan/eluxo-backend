@@ -12,8 +12,10 @@ module.exports = () => {
 
   process.on('unhandledRejection', (reason) => {
     logger.error('Unhandled Rejection', {
-      error: reason instanceof Error ? reason.message : String(reason),
-      stack: reason instanceof Error ? reason.stack : undefined,
+      error: reason.message || 'Unknown Error',
+      extra: {
+        ...reason,
+      },
     });
     /* eslint-disable no-process-exit */
     process.exit(1);

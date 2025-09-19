@@ -24,5 +24,16 @@ const getEnvData = () => {
   }
   return parsedEnv.data;
 };
-const processEnv = getEnvData();
-module.exports = Object.freeze(processEnv);
+const processEnv = Object.freeze(getEnvData());
+
+const getEnv = (key) => {
+  if (
+    typeof key !== 'string' ||
+    ['__proto__', 'constructor', 'prototype'].includes(key)
+  ) {
+    return undefined;
+  }
+  return Reflect.get(processEnv, key) || undefined;
+};
+
+module.exports = getEnv;

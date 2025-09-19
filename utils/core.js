@@ -75,6 +75,11 @@ function slugify(text) {
     .replace(/--+/g, '-'); // collapse dashes
 }
 
+/**
+ * Cleans an object by removing empty or undefined values.
+ * @param {*} obj - The object to clean.
+ * @returns {*} - The cleaned object.
+ */
 function cleanObject(obj) {
   return Object.fromEntries(
     Object.entries(obj).filter(
@@ -83,11 +88,40 @@ function cleanObject(obj) {
   );
 }
 
+/**
+ * Wraps an async function to handle errors and pass them to the next middleware.
+ * @param {Function} fn
+ * @returns {Function}
+ */
+const asyncHandler = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+/**
+ * Standardizes the API response format.
+ * @param {*} data - The response data.
+ * @param {*} message - The response message.
+ * @param {*} status - The response status.
+ * @returns {Object} - The standardized response object.
+ */
+const standardizeResponse = ({
+  data,
+  message = 'Success',
+  status = true,
+  ...extra
+}) => ({
+  status,
+  message,
+  data,
+  ...extra,
+});
+
 module.exports = {
   uuid,
   otp,
   slugify,
   cleanObject,
+  asyncHandler,
   getRootDirPath,
   parseDurationToMs,
+  standardizeResponse,
 };
