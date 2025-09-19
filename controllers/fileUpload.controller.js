@@ -1,12 +1,12 @@
 const storageService = require('../services/storage.service');
 const { ResponseError, GENERAL } = require('../errors');
-const { standardizeResponse } = require('../utils/core');
+const { standardizeResponse, asyncHandler } = require('../utils/core');
 
 /**
  * Single file upload
  * @route POST /uploads/single
  */
-exports.singleUpload = async (req, res, next) => {
+exports.singleUpload = asyncHandler(async (req, res, next) => {
   try {
     if (!req.file) {
       return next(
@@ -37,13 +37,13 @@ exports.singleUpload = async (req, res, next) => {
   } catch (error) {
     return next(new ResponseError(GENERAL.INTERNAL_ERROR, error.message, 500));
   }
-};
+});
 
 /**
  * Multi file upload
  * @route POST /uploads/multi
  */
-exports.multiUpload = async (req, res, next) => {
+exports.multiUpload = asyncHandler(async (req, res, next) => {
   try {
     if (!req.files || req.files.length === 0) {
       return next(
@@ -75,14 +75,14 @@ exports.multiUpload = async (req, res, next) => {
   } catch (error) {
     return next(new ResponseError(GENERAL.INTERNAL_ERROR, error.message, 500));
   }
-};
+});
 
 /**
  * Health check for the file upload service
  * @param {*} req
  * @param {*} res
  */
-exports.healthCheck = async (req, res) => {
+exports.healthCheck = asyncHandler(async (req, res) => {
   const health = await storageService.healthCheck();
   res.status(200).json(
     standardizeResponse({
@@ -90,4 +90,4 @@ exports.healthCheck = async (req, res) => {
       message: 'File upload service is healthy',
     })
   );
-};
+});

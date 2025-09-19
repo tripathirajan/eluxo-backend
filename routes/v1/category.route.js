@@ -1,4 +1,5 @@
-const categoryRoute = require('express').Router();
+const categoryPublicRoute = require('express').Router();
+const categoryPrivateRoute = require('express').Router();
 const categoryController = require('../../controllers/category.controller');
 const validator = require('../../validator');
 
@@ -13,7 +14,7 @@ const validator = require('../../validator');
  *       200:
  *         description: List of categories
  */
-categoryRoute.get('/', categoryController.getCategories);
+categoryPublicRoute.get('/', categoryController.getCategories);
 
 /**
  * @swagger
@@ -33,7 +34,7 @@ categoryRoute.get('/', categoryController.getCategories);
  *       200:
  *         description: Category data
  */
-categoryRoute.get(
+categoryPublicRoute.get(
   '/:id',
   validator('categoryId'),
   categoryController.getCategoryById
@@ -41,7 +42,7 @@ categoryRoute.get(
 
 /**
  * @swagger
- * /category:
+ * /admin/category:
  *   post:
  *     tags:
  *       - Category
@@ -76,7 +77,7 @@ categoryRoute.get(
  *       201:
  *         description: Category created
  */
-categoryRoute.post(
+categoryPrivateRoute.post(
   '/',
   validator('createCategory'),
   categoryController.createCategory
@@ -84,7 +85,7 @@ categoryRoute.post(
 
 /**
  * @swagger
- * /category/{id}:
+ * /admin/category/{id}:
  *   put:
  *     tags:
  *       - Category
@@ -123,7 +124,7 @@ categoryRoute.post(
  *       200:
  *         description: Category updated
  */
-categoryRoute.put(
+categoryPrivateRoute.put(
   '/:id',
   validator('categoryId'),
   validator('updateCategory'),
@@ -132,7 +133,7 @@ categoryRoute.put(
 
 /**
  * @swagger
- * /category/{id}:
+ * /admin/category/{id}:
  *   delete:
  *     tags:
  *       - Category
@@ -150,10 +151,13 @@ categoryRoute.put(
  *       204:
  *         description: Category deleted
  */
-categoryRoute.delete(
+categoryPrivateRoute.delete(
   '/:id',
   validator('categoryId'),
   categoryController.deleteCategory
 );
 
-module.exports = categoryRoute;
+module.exports = {
+  categoryPrivateRoute,
+  categoryPublicRoute,
+};

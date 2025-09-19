@@ -2,7 +2,10 @@ const apiV1Router = require('express').Router();
 const authGuard = require('../../middlewares/authGuard');
 const roleGuard = require('../../middlewares/roleGuard');
 const authRoute = require('./auth.route');
-const categoryRoute = require('./category.route');
+const {
+  categoryPrivateRoute,
+  categoryPublicRoute,
+} = require('./category.route');
 const adminProductRoute = require('./adminProduct.route');
 const productRoute = require('./product.route');
 const fileUploadRouter = require('./fileUploader.route');
@@ -11,10 +14,10 @@ const fileUploadRouter = require('./fileUploader.route');
  */
 
 apiV1Router.use(
-  '/category',
+  '/admin/category',
   authGuard,
   roleGuard(['superadmin', 'admin']),
-  categoryRoute
+  categoryPrivateRoute
 );
 apiV1Router.use(
   '/admin/product',
@@ -34,5 +37,6 @@ apiV1Router.use(
  */
 apiV1Router.use('/auth', authRoute);
 apiV1Router.use('/product', productRoute);
+apiV1Router.use('/category', categoryPublicRoute);
 
 module.exports = apiV1Router;
